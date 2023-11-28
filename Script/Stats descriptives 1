@@ -1,0 +1,31 @@
+######## Temps du vainqueur en sec/km par année ########
+
+# Filtrer les lignes avec rank=1 et dans les 20 dernières années
+filtered_results = [row for row in filtered_rows if row["rank"] == '1' and int(row["year"]) >= 2003]
+
+# Calculer le temps du vainqueur divisé par le nombre de kilomètres pour chaque année
+results_per_year = []
+for result in filtered_results:
+    distance_km = int(result["distance"])
+    total_seconds = int(result["TotalSeconds"])
+    time_per_km = total_seconds / distance_km
+    results_per_year.append({"year": result["year"], "time_per_km": time_per_km})
+
+# Afficher les résultats
+for result in results_per_year:
+    print(f"Année {result['year']} : Temps du vainqueur par kilomètre = {result['time_per_km']} secondes/km")
+
+import matplotlib.pyplot as plt
+
+# Données à partir des résultats calculés
+years = [result["year"] for result in results_per_year]
+time_per_km_values = [result["time_per_km"] for result in results_per_year]
+
+# Créer un graphique
+plt.figure(figsize=(10, 6))
+plt.plot(years, time_per_km_values, marker='o', linestyle='-', color='b')
+plt.title('Temps du vainqueur par kilomètre (rank=1) sur les 20 dernières années')
+plt.xlabel('Année')
+plt.ylabel('Temps par kilomètre (secondes/km)')
+plt.grid(True)
+plt.show()
