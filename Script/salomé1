@@ -102,4 +102,4 @@ for row in reader:
 for i, formatted_row in enumerate(filtered_rows[:10], 1):
     print(f"Ligne {i} :", formatted_row)
 
-### 8600 lignes ###
+### C'est pas mal : 8600 lignes ###
