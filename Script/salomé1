@@ -1,1 +1,71 @@
-a
+################ Importer la base de données #######################
+
+import csv
+import requests
+from io import StringIO
+
+# URL of the CSV file on GitHub
+url = "https://raw.githubusercontent.com/thomascamminady/LeTourDataSet/master/data/TDF_Riders_History.csv"
+
+# Download the file content
+response = requests.get(url)
+csv_data = StringIO(response.text)
+
+# Create a CSV reader
+reader = csv.reader(csv_data)
+
+
+################ 1e tentative de filtre : nombre d'étapes=21 (editions modernes) #######################
+
+
+# Variable pour suivre le numéro de ligne de la première occurrence de "Number of stages" égal à 21
+first_occurrence_line = None
+
+# Itérer à travers les lignes
+for i, row in enumerate(reader):
+    # Ignorer la ligne d'en-tête
+    if i == 0:
+        continue
+
+    # Extraire la valeur de "Number of stages"
+    number_of_stages = int(row[-4])
+
+    # Vérifier si "Number of stages" est égal à 21 et que nous n'avons pas encore trouvé d'occurrence
+    if number_of_stages == 21 and first_occurrence_line is None:
+        first_occurrence_line = i
+
+# Afficher le résultat
+if first_occurrence_line is not None:
+    print(f"Numéro de ligne : {first_occurrence_line}, Première occurrence de Number of stages égal à 21")
+else:
+    print("Aucune occurrence trouvée de Number of stages égal à 21")
+
+###On a éliminé 800 lignes sur 9800###
+
+
+################ 2e tentative de filtre : distance=3500km ± 1000km (editions modernes) #######################
+
+# Index de la colonne "Distance (km)"
+distance_index = "Distance (km)"
+
+# Liste pour stocker toutes les distances
+distances = []
+
+# Itérer à travers les lignes
+for row in reader:
+    # Extraire la valeur de la colonne "Distance (km)"
+    distance = int(row[distance_index])
+
+    # Ajouter la distance à la liste
+    distances.append(distance)
+
+# Afficher toutes les distances
+print("Distances possibles : ", distances)
+
+# Compter le nombre de distances supérieures à 4000
+distances_above_4500 = sum(1 for distance in distances if distance > 4500)
+print("Nombre de distances supérieures à 4000 : ", distances_above_4500)
+
+###On a éliminé 1407 lignes sur 9800###
+
+################ Table filtrée (editions modernes) #######################
