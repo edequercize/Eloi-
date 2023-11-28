@@ -40,7 +40,7 @@ if first_occurrence_line is not None:
 else:
     print("Aucune occurrence trouvée de Number of stages égal à 21")
 
-###On a éliminé 800 lignes sur 9800 MAIS CE N'EST PAS UN BON FILTRE (jusqu'à 30 étapes de 1950 à 1990)###
+### CE N'EST PAS UN BON FILTRE (jusqu'à 30 étapes de 1950 à 1990)###
 
 
 ################ 2e tentative de filtre : distance=3500km ± 1000km (editions modernes) #######################
@@ -79,17 +79,27 @@ filtered_rows = []
 # Itérer à travers les lignes
 for row in reader:
     # Extraire les valeurs des colonnes nécessaires
-    distance = int(row[distance_index])
-    stages = int(row[stages_index])
     year = int(row[year_index])
 
     # Vérifier les conditions de filtrage
     if year >= 1947:
         # Ajouter la ligne à la liste des lignes filtrées
-        filtered_rows.append(row)
+        filtered_row = {
+            "Nom de la course": "Tour de France",
+            "year": row["Year"],
+            "rider": row["Rider"],
+            "no.rider": row["Rider No."],
+            "rank": row["Rank"],
+            "team": row["Team"],
+            "distance": row["Distance (km)"],
+            "number of stages": row["Number of stages"],
+            "TotalSeconds": row["TotalSeconds"],
+            "GapSeconds": row["GapSeconds"]
+        }
+        filtered_rows.append(filtered_row)
 
-# Afficher les lignes filtrées
-for filtered_row in filtered_rows:
-    print(filtered_row)
+# Afficher les 10 premières lignes de la base formatée
+for i, formatted_row in enumerate(filtered_rows[:10], 1):
+    print(f"Ligne {i} :", formatted_row)
 
-
+### 8600 lignes ###
