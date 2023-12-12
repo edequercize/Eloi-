@@ -1,12 +1,4 @@
 ######## Mettre le nom sous le bon format ##############
-######## En 2 parties ###########
-def format_name2(name):
-    # Sépare chaque mot et met en majuscule la première lettre, puis rejoint les mots avec des underscores
-    return "_".join(word.capitalize() for word in name.split())
-
-######## En 3 parties ###########
-
-import re
 
 def split_name(name):
     # Sépare le nom par des tirets et des espaces, puis retourne une liste des parties du nom
@@ -28,15 +20,20 @@ def format_name3(name):
     (n1, n2, n3) = split_name(name)
     return reco(n1, n2, n3)
 
+def supprimer_tirets(mot):
+    modified_string = ' '.join(word.replace('-', ' ') for word in mot.split())
+    return modified_string
 
-########### Scrapper la date de naissance sur wikipedia ###########
+def generate_wikipedia_link(nom):
+    mots = supprimer_tirets(nom).split()
+    name = nom
 
-def generate_wikipedia_link(name):
-    return f"https://fr.wikipedia.org/wiki/{name}"
+    if len(mots) == 2:
+        name = "_".join(word.capitalize() for word in nom.split())
+        return f"https://fr.wikipedia.org/wiki/{name}"
 
-# Exemple d'utilisation
-nom = total("JEAN-MARIE GOASMAT")
-lien_wikipedia = generate_wikipedia_link(nom)
-print(lien_wikipedia)
+    if len(mots) == 3:
+        return f"https://fr.wikipedia.org/wiki/{format_name3(nom)}"
 
-
+print(generate_wikipedia_link("PELLO BILBAO"))
+print(generate_wikipedia_link("JEAN-MARIE GOASMAT"))
